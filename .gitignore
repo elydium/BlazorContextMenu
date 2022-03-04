@@ -260,10 +260,10 @@ paket-files/
 __pycache__/
 *.pyc
 
-/BlazorContextMenu/content/*.min.css
-/BlazorContextMenu/content/*.min.js
+#/BlazorContextMenu/content/*.min.css
+#/BlazorContextMenu/content/*.min.js
 /TestApps/RazorComponentsTestApp/BlazorContextMenu.RazorComponentsTestApp/wwwroot/BlazorContextMenu.min.js
 /TestApps/RazorComponentsTestApp/BlazorContextMenu.RazorComponentsTestApp/wwwroot/styles.min.css
 /DemoApp/BlazorContextMenu.DemoApp.Server/ClientSources
-/BlazorContextMenu/wwwroot/BlazorContextMenu.min.css
-/BlazorContextMenu/wwwroot/BlazorContextMenu.min.js
+#/BlazorContextMenu/wwwroot/BlazorContextMenu.min.css
+#/BlazorContextMenu/wwwroot/BlazorContextMenu.min.js
