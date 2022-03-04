@@ -21,18 +21,23 @@
     <Product>Blazor.ContextMenu</Product>
   </PropertyGroup>
   
+  <!--
   <Target Name="EnsureNpmRestored" BeforeTargets="Minification" Condition="'$(Configuration)' == 'Debug' And !Exists('node_modules')">
-    <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+    <Exec Command="echo Configuration = $(Configuration)" />
+	<Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
     <Exec Command="npm install" />
   </Target>
 
   <Target Name="Minification" BeforeTargets="BeforeBuild" Condition="'$(Configuration)' == 'Debug'">
-    <Message Importance="high" Text="Minifying static assets ..." />
+	<Exec Command="echo Configuration = $(Configuration)" />
+	<Message Importance="high" Text="Minifying static assets ..." />
     <Exec Command="npm run minify" />
   </Target>
+  -->
   
   <ItemGroup>
     <Compile Remove="node_modules\**" />
+    <Content Remove="node_modules\**" />
     <Content Remove="node_modules\**" />
     <EmbeddedResource Remove="node_modules\**" />
     <None Remove="node_modules\**" />
