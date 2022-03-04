@@ -38,7 +38,7 @@ var blazorContextMenu = function (blazorContextMenu) {
         function recurse(element, className, found) {
             for (var i = 0; i < element.childNodes.length && !found; i++) {
                 var el = element.childNodes[i];
-                var classes = el.className != undefined ? el.className.split(" ") : [];
+                var classes = (el.className != undefined && typeof el.className === 'string') ? el.className.split(" ") : [];
                 for (var j = 0, jl = classes.length; j < jl; j++) {
                     if (classes[j] == className) {
                         found = true;
@@ -60,7 +60,7 @@ var blazorContextMenu = function (blazorContextMenu) {
         function recurse(element, className) {
             for (var i = 0; i < element.childNodes.length; i++) {
                 var el = element.childNodes[i];
-                var classes = el.className != undefined ? el.className.split(" ") : [];
+                var classes = (el.className != undefined && typeof el.className === 'string') ? el.className.split(" ") : [];
                 for (var j = 0, jl = classes.length; j < jl; j++) {
                     if (classes[j] == className) {
                         foundElements.push(element.childNodes[i]);
