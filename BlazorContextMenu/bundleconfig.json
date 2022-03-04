@@ -1,0 +1,14 @@
+[
+  {
+    "outputFileName": "wwwroot/blazorContextMenu.min.js",
+    "inputFiles": [
+      "wwwroot/blazorContextMenu.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/blazorContextMenu.min.css",
+    "inputFiles": [
+      "wwwroot/blazorContextMenu.css"
+    ]
+  }
+]
