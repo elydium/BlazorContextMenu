@@ -244,7 +244,38 @@ public class Startup
 </details>
 
 ## Release Notes
-<details open="open"><summary>1.11</summary>
+<details open="open"><summary>1.17</summary>
+
+>- Upgraded asp .net packages dependencies to 6.0.25 due to security concerns.
+</details>
+
+<details><summary>1.16</summary>
+
+>- Fixes issue with opening a contextual menu on the far right side of the window for the first time not properly offsetting. Contributed by [matt-virtualitics](https://github.com/matt-virtualitics).
+</details>
+
+<details><summary>1.15</summary>
+
+>- Add IsMenuShown to BlazorContextMenuService. Contributed by [Adam Ashton](https://github.com/adamashton).
+</details>
+
+<details><summary>1.14</summary>
+
+>- Fix for [#121](https://github.com/stavroskasidis/BlazorContextMenu/issues/121).
+</details>
+
+<details><summary>1.13</summary>
+
+>- Fix for [#114](https://github.com/stavroskasidis/BlazorContextMenu/issues/114).
+</details>
+
+
+<details><summary>1.12</summary>
+
+>- Fix for [#110](https://github.com/stavroskasidis/BlazorContextMenu/issues/110). Contributed by [SebastianWachsmuth](https://github.com/SebastianWachsmuth).
+</details>
+
+<details><summary>1.11</summary>
 
 >- Upgraded to dotnet 6.0
 </details>

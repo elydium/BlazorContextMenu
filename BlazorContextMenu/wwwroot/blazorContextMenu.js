@@ -36,19 +36,19 @@ var blazorContextMenu = function (blazorContextMenu) {
     function findFirstChildByClass(element, className) {
         var foundElement = null;
         function recurse(element, className, found) {
-            for (var i = 0; i < element.childNodes.length && !found; i++) {
-                var el = element.childNodes[i];
+            for (var i = 0; i < element.children.length && !found; i++) {
+                var el = element.children[i];
                 var classes = (el.className != undefined && typeof el.className === 'string') ? el.className.split(" ") : [];
                 for (var j = 0, jl = classes.length; j < jl; j++) {
                     if (classes[j] == className) {
                         found = true;
-                        foundElement = element.childNodes[i];
+                        foundElement = element.children[i];
                         break;
                     }
                 }
                 if (found)
                     break;
-                recurse(element.childNodes[i], className, found);
+                recurse(element.children[i], className, found);
             }
         }
         recurse(element, className, false);
@@ -58,15 +58,15 @@ var blazorContextMenu = function (blazorContextMenu) {
     function findAllChildsByClass(element, className) {
         var foundElements = new Array();
         function recurse(element, className) {
-            for (var i = 0; i < element.childNodes.length; i++) {
-                var el = element.childNodes[i];
+            for (var i = 0; i < element.children.length; i++) {
+                var el = element.children[i];
                 var classes = (el.className != undefined && typeof el.className === 'string') ? el.className.split(" ") : [];
                 for (var j = 0, jl = classes.length; j < jl; j++) {
                     if (classes[j] == className) {
-                        foundElements.push(element.childNodes[i]);
+                        foundElements.push(element.children[i]);
                     }
                 }
-                recurse(element.childNodes[i], className);
+                recurse(element.children[i], className);
             }
         }
         recurse(element, className);
@@ -79,6 +79,21 @@ var blazorContextMenu = function (blazorContextMenu) {
                 array.splice(i, 1);
             }
         }
+    }
+
+    var sleepUntil = function (f, timeoutMs) {
+        return new Promise(function (resolve, reject){
+            var timeWas = new Date();
+            var wait = setInterval(function () {
+                if (f()) {
+                    clearInterval(wait);
+                    resolve();
+                } else if (new Date() - timeWas > timeoutMs) {
+                    clearInterval(wait);
+                    reject();
+                }
+            }, 20);
+        });
     }
 
 
@@ -107,7 +122,7 @@ var blazorContextMenu = function (blazorContextMenu) {
         //openingMenu = true;
         var menu = document.getElementById(menuId);
         if (!menu) throw new Error("No context menu with id '" + menuId + "' was found");
-        addToOpenMenus(menu,menuId, null);
+        addToOpenMenus(menu, menuId, null);
         showMenuCommon(menu, menuId, x, y, null, null);
     }
 
@@ -115,7 +130,7 @@ var blazorContextMenu = function (blazorContextMenu) {
         //openingMenu = true;
         var menu = document.getElementById(menuId);
         if (!menu) throw new Error("No context menu with id '" + menuId + "' was found");
-        addToOpenMenus(menu,menuId, e.target);
+        addToOpenMenus(menu, menuId, e.target);
         var triggerDotnetRef = JSON.parse(e.currentTarget.dataset["dotnetref"]);
         showMenuCommon(menu, menuId, e.x, e.y, e.target, triggerDotnetRef);
         e.preventDefault();
@@ -127,6 +142,8 @@ var blazorContextMenu = function (blazorContextMenu) {
 
     var showMenuCommon = function (menu, menuId, x, y, target, triggerDotnetRef) {
         return blazorContextMenu.Show(menuId, x, y, target, triggerDotnetRef).then(function () {
+            return sleepUntil(function () { return menu.clientWidth > 0 }, 1000); //Wait until the menu has spawned so clientWidth and offsetLeft report correctly
+        }).then(function () {
             //check for overflow
             var leftOverflownPixels = menu.offsetLeft + menu.clientWidth - window.innerWidth;
             if (leftOverflownPixels > 0) {
@@ -211,6 +228,15 @@ var blazorContextMenu = function (blazorContextMenu) {
         });
     }
 
+    blazorContextMenu.IsMenuShown = function (menuId) {
+        var menuElement = document.getElementById(menuId);
+        var instanceId = menuElement.dataset["instanceId"];
+        var menu = openMenus.find(function (item) {
+            return item.instanceId == instanceId;
+        });
+        return typeof(menu) != 'undefined' && menu != null;
+    }
+
     var subMenuTimeout = null;
     blazorContextMenu.OnMenuItemMouseOver = function (e, xOffset, currentItemElement) {
         if (closest(e.target, ".blazor-context-menu__wrapper") != closest(currentItemElement, ".blazor-context-menu__wrapper")) {
@@ -255,20 +281,20 @@ var blazorContextMenu = function (blazorContextMenu) {
                         blazorContextMenu.Hide(subMenu.id);
                     }
 
-                    i = currentMenuList.childNodes.length;
+                    i = currentMenuList.children.length;
                     while (i--) {
-                        var childNode = currentMenuList.childNodes[i];
-                        if (childNode == currentItemElement) continue;
-                        childNode.removeEventListener("mouseover", closeSubMenus);
+                        var child = currentMenuList.children[i];
+                        if (child == currentItemElement) continue;
+                        child.removeEventListener("mouseover", closeSubMenus);
                     }
                 };
 
-                var i = currentMenuList.childNodes.length;
+                var i = currentMenuList.children.length;
                 while (i--) {
-                    var childNode = currentMenuList.childNodes[i];
-                    if (childNode == currentItemElement) continue;
+                    var child = currentMenuList.children[i];
+                    if (child == currentItemElement) continue;
 
-                    childNode.addEventListener("mouseover", closeSubMenus);
+                    child.addEventListener("mouseover", closeSubMenus);
                 }
             });
         }, 200);
